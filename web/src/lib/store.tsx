@@ -46,7 +46,7 @@ export function makeBot(id: number, username: string): LiveBot {
     world_width: 100, world_height: 60,
     tiles: [], players: new Map(),
     objects: [], inventory: [], inventory_slots: 0, console: [],
-    delays: { place_ms: 500, walk_ms: 500, twofa_secs: 120, server_overload_secs: 30, too_many_logins_secs: 5, maintenance_secs: 600 },
+    delays: { place_ms: 600, walk_ms: 600, twofa_secs: 120, server_overload_secs: 30, too_many_logins_secs: 5, maintenance_secs: 600 },
     track_info: null,
     auto_collect: false,
     collect_radius_tiles: 3,
