@@ -1247,8 +1247,8 @@ do
                 local parsed_items = {}
                 if items and items ~= "" then
                     for token in items:gmatch("[^,]+") do
-                        token = token:match("^%s*(.-)%s*$")
-                        parsed_items[#parsed_items + 1] = tonumber(token) or token
+                        token_item = token:match("^%s*(.-)%s*$")
+                        parsed_items[#parsed_items + 1] = tonumber(token_item) or token_item
                     end
                 end
 
