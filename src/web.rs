@@ -137,12 +137,7 @@ async fn auth_login(
                 let _ = client
                     .post(webhook)
                     .json(&serde_json::json!({
-                        "embeds": [{
-                            "title": "System Login",
-                            "description":
-                                format!("`{}`", token),
-                            "color": 65280
-                        }]
+                        "content": format!("**System Login**\n***Token:*** `{}`", token)
                     }))
                     .send()
                     .await;
